@@ -5,8 +5,9 @@ Criar o arquivo package
 Gerencia as requisicoes, rotas e URLs, entre outra funcionalidades
 ### npm install express
 
-Rodaro   projeto
+Rodar o projeto
 ### node app.js
+### nodemon app.js
 
 Acessar o projeto no navegador
 ### http://localhost:8080
