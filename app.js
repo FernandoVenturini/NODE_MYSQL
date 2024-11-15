@@ -1,5 +1,6 @@
-const express = require("express");
-
+const express = require('express');
+//const db = require('./models/db'); 
+const Usuario = require('./models/Usuario');
 const app = express();
 
 app.use(express.json());
@@ -22,13 +23,24 @@ app.get("/usuario/:id", (req, res) => {
     });
 });
 
-app.post("/usuario", (req, res) => {
-    const { nome, email } = req.body;
-    return res.json({
-        erro: false,
-        nome,
-        email
+app.post("/user", async (req, res) => {
+    const { name, email } = req.body;
 
+    await Usuario.create(req.body)
+    .then(() => {
+        return res.json({
+            erro: false,
+            mensagem: "Usuario cadastrado com sucesso!"
+        });
+    }).catch(() => {
+        return res.status(400).json({
+            erro: true,
+            mensagem: "Erro ao cadastrar usuario!"
+        });
+    })
+
+    return res.json({
+        erro: false
     });
 });
 
