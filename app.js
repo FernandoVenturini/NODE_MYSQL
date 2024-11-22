@@ -1,68 +1,68 @@
-const express = require('express');
-//const db = require('./models/db'); 
-const Usuario = require('./models/Usuario');
+// Importando o express:
+const express = require("express"); // Isso e uma funcao
+
+// Importando a conexao com o banco de dados:
+const db = require('./models/db');
+
+// Executando a funcao acima require(express):
 const app = express();
 
+// Informando que aceita os dados em JSON
 app.use(express.json());
 
-app.get("/usuarios", (req, res) => {
+// Cria uma rota:
+app.get("/usuarios",(req, res) => {
+    //res.send("Hello, world!");
     return res.json({
         erro: false,
         nome: "Cesar",
-        email:"cesar@celke.com.br"
+        email: "cesar@celke.com"
     });
 });
 
+// Cria uma rota GET:
 app.get("/usuario/:id", (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
+    // res.send("Olá, mundo!");
     return res.json({
         erro: false,
         id,
         nome: "Fernando",
-        email:"fernando@celke.com.br"
+        email: "fernando@lvfcode.com"
     });
 });
 
-app.post("/user", async (req, res) => {
-    const { name, email } = req.body;
-
-    await Usuario.create(req.body)
-    .then(() => {
-        return res.json({
-            erro: false,
-            mensagem: "Usuario cadastrado com sucesso!"
-        });
-    }).catch(() => {
-        return res.status(400).json({
-            erro: true,
-            mensagem: "Erro ao cadastrar usuario!"
-        });
-    })
-
-    return res.json({
-        erro: false
-    });
-});
-
-app.put("/usuario", (req, res) => {
-    const { id, nome, email } = req.body;
+// Criando rota POST:
+app.post("/usuario", (req, res) => {
+    const { nome, email } = req.body;
     return res.json({
         erro: false,
-        id,
         nome,
         email
     });
 });
 
+// Criando rota PUT:
+app.put("/usuario", (req,res) => {
+    const { id, nome, email } = req.body;
+    return res.json({
+        erro: false,
+        id, 
+        nome,
+        email
+    });
+});
+
+// Criando rota DELETE:
 app.delete("/usuario/:id", (req, res) => {
     const { id } = req.params;
     return res.json({
         erro: false,
-        id,
-        mensagem: "Usuario deletado com sucesso"
+        id
     });
-});
+})
 
-app.listen(8080, () => {
-    console.log("Servidor iniciado na porta 8080: http://localhost:8080");
+// Iniciando o servidor: em qual porta vai rodar o projeto
+app.listen(8081, () =>  {
+    console.log("Servidor iniciado na porta 8081");
 });

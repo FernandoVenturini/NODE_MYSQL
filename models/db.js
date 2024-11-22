@@ -1,17 +1,30 @@
-const Sequelize = require('sequelize'); // Importando a Biblioteca Sequelize;
+// Esse arquivo vai fazer a conexao com banco de dados:
+// 1 - Importar o modulo sequelize:
+const { Sequelize } = require('sequelize');
 
-// Passing parameters separately (other dialects):
-const sequelize = new Sequelize('celke', 'root', 'LAVINIA12', {
+// Passando parametros separadamente:
+const sequelize = new Sequelize('celke', 'root', '123456', {
     host: 'localhost',
-    dialect: 'mysql'
+    dialect: 'mysql',
 });
 
-// Testando a conexao com o banco de dados:
-sequelize.authenticate() // Se nao conseguir executar com sucesso
-.then(function(){
-    console.log('Error!!! Nao conectado com o banco de dados.');
-}).catch(function(){ // Se conseguir executar com sucesso
-    console.log('Conectado com sucesso.');
+// Para ter certeza de que a conexao foi feita com o banco de dados:
+/*EXEMPLO 01:
+sequelize.authenticate()
+.then(function() {
+    console.log('Conexao com o banco de dados realizada com sucesso!');
+}).catch(function() {
+    console.log('Erro ao conectar com o banco de dados!');
 });
+*/
 
+// EXEMPLO 02:
+try{
+    sequelize.authenticate();
+    console.log('Conexao com o banco de dados realizada com sucesso!');
+}catch(error) {
+    console.log('Erro ao conectar com o banco de dados:', error);
+}
+
+// Exportando essa conexao com o banco de dados:
 module.exports = sequelize;
