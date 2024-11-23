@@ -80,3 +80,6 @@ Instalar o modulo para criptografar a senha
 
 /* COMO GERAR E VALIDAR O TOKEN COM JWT */
 ### npm install --save jsonwebtoken
+
+Gerenciar variaveis de ambiente:
+### npm install --save dotenv

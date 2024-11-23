@@ -10,8 +10,14 @@ const bcrypt = require("bcryptjs");
 // Incluindo biblioteca que gera e valida o token - JWT
 const jwt = require('jsonwebtoken');
 
+// Importando biblioteca que gerencia variaveis do ambiente:
+require('dotenv').config();
+
+// Exportando o modulo eAdmin:
+const { eAdmin } = require('./middlewares/auth');
+
 // Incluindo promisify:
-const { promisify } = require('util');                    
+//const { promisify } = require('util');                    
 
 // Incluindo Usuario.js aqui no app.js
 const User = require("./models/User");
@@ -23,7 +29,7 @@ const app = express();
 app.use(express.json());
 
 // Cria uma rota:
-app.get("/users", async (req, res) => {
+app.get("/users", eAdmin ,async (req, res) => {
     //res.send("Hello, world!");
 
     await User.findAll({
@@ -43,7 +49,7 @@ app.get("/users", async (req, res) => {
 });
 
 // Cria uma rota GET:
-app.get("/user/:id", validarToken, validarToken, async (req, res) => {
+app.get("/user/:id", eAdmin, async (req, res) => {
     const { id } = req.params;
     // res.send("Olá, mundo!");
 
@@ -63,7 +69,7 @@ app.get("/user/:id", validarToken, validarToken, async (req, res) => {
 });
 
 // Criando rota POST:
-app.post("/user", validarToken, async (req, res) => {
+app.post("/user", eAdmin, async (req, res) => {
     var dados = req.body;
     dados.password  = await bcrypt.hash(dados.password, 8);
     
@@ -84,7 +90,7 @@ app.post("/user", validarToken, async (req, res) => {
 });
 
 // Criando rota PUT:
-app.put("/user", validarToken, async (req,res) => {
+app.put("/user", eAdmin, async (req,res) => {
     const { id } = req.body;
 
     await User.update(req.body, { where: {id: id} })
@@ -102,7 +108,7 @@ app.put("/user", validarToken, async (req,res) => {
 });
 
 // Criando a rota PUT com CRIPTOGRAFIA:
-app.put("/user-senha", validarToken, async (req,res) => {
+app.put("/user-senha", eAdmin, async (req,res) => {
     const { id, password } = req.body;
 
     var senhaCrypt = await bcrypt.hash(password, 8);
@@ -122,7 +128,7 @@ app.put("/user-senha", validarToken, async (req,res) => {
 });
 
 // Criando rota DELETE:
-app.delete("/user/:id", validarToken,async (req, res) => {
+app.delete("/user/:id", eAdmin,async (req, res) => {
     const { id } = req.params;
 
     await User.destroy({ where: { id } })
@@ -165,9 +171,9 @@ app.post('/login', async (req, res) => {
 
     // Implementando o token que gera e faz a validacao:
     //const token = jwt.sign({ id: user.id }, 'minha-chave-secreta');
-    const token = jwt.sign({id: user.id}, '583a3549456251362c5a21314245576f', {
-        expiresIn: '600', // 10 min
-        expiresIn: '7d' // 7 dias
+    var token = jwt.sign({id: user.id}, process.env.SECRET, {
+        //expiresIn: '600', // 10 min
+        expiresIn: '7d', // 7 dias
     });
 
     return res.json({
@@ -178,7 +184,7 @@ app.post('/login', async (req, res) => {
 });
 
 // Validando o token:
-async function validarToken(req, res, next) {
+/*async function validarToken(req, res, next) {
     // return res.json({  messagem: 'Validar token' });
 
     // Recebendo o token:
@@ -205,9 +211,9 @@ async function validarToken(req, res, next) {
         });
     };
 
-    return res.json({  messagem: token});
+    //return res.json({  messagem: token});
     //return next();
-};
+};*/
 
 // Iniciando o servidor: em qual porta vai rodar o projeto
 app.listen(8081, () =>  {
